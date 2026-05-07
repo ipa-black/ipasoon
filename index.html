@@ -45,7 +45,7 @@
 
         .app-meta { display: flex; align-items: center; }
         .app-icon { width: 60px; height: 60px; border-radius: 15px; margin-left: 15px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .app-info h3 { margin: 0; font-size: 1.2rem; font-weight: 700; text-align: right; }
+        .app-info h3 { margin: 0; font-size: 1.25rem; font-weight: 700; text-align: right; }
 
         .install-btn {
             background: #ffffff;
@@ -57,7 +57,7 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            min-width: 100px;
+            min-width: 105px;
         }
 
         .install-btn span { position: relative; z-index: 2; }
@@ -100,7 +100,9 @@
                 const item = document.createElement('div');
                 item.className = 'app-item';
                 
-                const plistUrl = `https://${window.location.host}/api/install?name=${encodeURIComponent(app.name)}&url=${encodeURIComponent(app.downloadURL)}&bid=${encodeURIComponent(app.bundleIdentifier)}&img=${encodeURIComponent(app.image)}`;
+                // تشفير البيانات لإرسالها لـ API الـ plist
+                const plistParams = `name=${encodeURIComponent(app.name)}&url=${encodeURIComponent(app.downloadURL)}&bid=${encodeURIComponent(app.bundleIdentifier)}&img=${encodeURIComponent(app.image)}`;
+                const plistUrl = `https://${window.location.host}/api/install?${plistParams}`;
                 const itms = `itms-services://?action=download-manifest&url=${encodeURIComponent(plistUrl)}`;
 
                 item.innerHTML = `
@@ -116,7 +118,7 @@
                 setTimeout(() => item.classList.add('show'), i * 100);
             });
         } catch (e) {
-            console.error(e);
+            console.error("Error loading apps:", e);
         }
     }
 
@@ -124,14 +126,14 @@
         btn.classList.add('loading');
         btn.querySelector('span').innerText = 'جاري...';
 
-        // فتح التثبيت برمجياً
+        // محاولة تشغيل رابط التثبيت
         setTimeout(() => {
             const link = document.createElement('a');
             link.href = url;
             link.click();
         }, 100);
 
-        // التحويل للتليجرام بعد 1.5 ثانية (بعد اكتمال الشريط)
+        // التحويل لقناة التليجرام بعد 1.5 ثانية (بعد اكتمال أنميشن الزر)
         setTimeout(() => {
             window.location.href = 'https://t.me/ipasoon';
         }, 1500);
