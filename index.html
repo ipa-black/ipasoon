@@ -6,11 +6,11 @@
     <title>IPA SOON</title>
     <style>
         :root {
-            --bg: #0b0e14;
-            --card: #151921;
-            --accent: #007aff;
+            --bg: #0d1117;
+            --card: #161b22;
+            --accent: #0a84ff;
             --text: #ffffff;
-            --muted: #86868b;
+            --muted: #8b949e;
         }
 
         body {
@@ -18,23 +18,19 @@
             color: var(--text);
             font-family: -apple-system, system-ui, sans-serif;
             margin: 0; padding: 0;
-        }
-
-        header {
             text-align: center;
-            padding: 60px 20px;
-            background: linear-gradient(to bottom, #11141b, var(--bg));
         }
 
-        header h1 { font-size: 2.5rem; margin: 0; letter-spacing: -1px; }
-        header p { color: var(--muted); margin-top: 10px; font-size: 1.1rem; }
+        header { padding: 50px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        header h1 { font-size: 2.8rem; margin: 0; background: linear-gradient(#fff, #8b949e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header p { color: var(--muted); margin-top: 10px; }
 
-        .container { max-width: 600px; margin: auto; padding: 20px; }
+        .container { max-width: 650px; margin: auto; padding: 20px; }
 
         .app-item {
             background: var(--card);
-            border-radius: 35px; /* حواف فائقة النعومة */
-            padding: 15px 20px;
+            border-radius: 35px;
+            padding: 18px 25px;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -45,28 +41,21 @@
 
         .app-item.show { opacity: 1; transform: translateY(0); }
 
-        .app-icon {
-            width: 65px; height: 65px;
-            border-radius: 18px;
-            margin-left: 15px;
-            background: #222;
-        }
-
-        .app-info { flex: 1; }
-        .app-info h3 { margin: 0; font-size: 1.1rem; }
-        .app-info p { margin: 3px 0 0; color: var(--muted); font-size: 0.8rem; font-family: monospace; }
+        .app-info { flex: 1; text-align: right; }
+        .app-info h3 { margin: 0; font-size: 1.2rem; }
+        .app-info p { margin: 4px 0 0; color: var(--muted); font-size: 0.8rem; font-family: monospace; }
 
         .install-btn {
-            background: #fff;
-            color: #000;
+            background: #ffffff;
+            color: #000000;
             border: none;
-            padding: 10px 22px;
+            padding: 10px 25px;
             border-radius: 25px;
-            font-weight: bold;
+            font-weight: 800;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            min-width: 90px;
+            min-width: 100px;
         }
 
         .install-btn span { position: relative; z-index: 2; }
@@ -74,8 +63,7 @@
         .install-btn::after {
             content: '';
             position: absolute;
-            top: 0; right: 0; height: 100%;
-            width: 0%;
+            top: 0; right: 0; height: 100%; width: 0%;
             background: var(--accent);
             z-index: 1;
             transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -83,71 +71,66 @@
 
         .install-btn.loading { color: #fff; pointer-events: none; }
         .install-btn.loading::after { width: 100%; }
-
-        #loading-ui { text-align: center; color: var(--muted); padding: 20px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>IPA SOON</h1>
-    <p>التطبيقات موقعة ب شهادة مجانية</p>
+    <p>التطبيقات موقعة بشهادة مجانية</p>
 </header>
 
-<div class="container">
-    <div id="loading-ui">جاري التحميل...</div>
-    <div id="app-list"></div>
+<div class="container" id="app-list">
+    <p id="status">جاري جلب التطبيقات...</p>
 </div>
 
 <script>
-    async function loadApps() {
+    async function init() {
         try {
             const res = await fetch('apps.json');
-            const apps = await res.json();
+            const data = await res.json();
             const list = document.getElementById('app-list');
-            document.getElementById('loading-ui').remove();
+            document.getElementById('status').remove();
 
-            apps.forEach((app, i) => {
+            data.apps.forEach((app, i) => {
                 const item = document.createElement('div');
                 item.className = 'app-item';
                 
-                // إنشاء رابط البليست عبر الـ API
-                const plistUrl = `https://${window.location.host}/api/install?name=${encodeURIComponent(app.name)}&ipa_url=${encodeURIComponent(app.ipa_url)}&bundle_id=${encodeURIComponent(app.bundle_id)}&image_url=${encodeURIComponent(app.image_url)}`;
+                // إنشاء رابط البليست المباشر
+                const plistUrl = `https://${window.location.host}/api/install?name=${encodeURIComponent(app.name)}&url=${encodeURIComponent(app.downloadURL)}&bid=${encodeURIComponent(app.bundleIdentifier)}`;
                 const itms = `itms-services://?action=download-manifest&url=${encodeURIComponent(plistUrl)}`;
 
                 item.innerHTML = `
-                    <img src="${app.image_url}" class="app-icon" onerror="this.src='https://via.placeholder.com/65'">
                     <div class="app-info">
                         <h3>${app.name}</h3>
-                        <p>${app.bundle_id}</p>
+                        <p>${app.bundleIdentifier}</p>
                     </div>
-                    <button class="install-btn" onclick="startInstall(this, '${itms}')">
+                    <button class="install-btn" onclick="install(this, '${itms}')">
                         <span>تثبيت</span>
                     </button>
                 `;
                 list.appendChild(item);
                 setTimeout(() => item.classList.add('show'), i * 100);
             });
-        } catch (e) { console.error(e); }
+        } catch (e) { console.error("Error loading JSON", e); }
     }
 
-    function startInstall(btn, url) {
+    function install(btn, url) {
         btn.classList.add('loading');
         btn.querySelector('span').innerText = 'جاري...';
 
-        // تنفيذ التثبيت بعد انتهاء الأنميشن
         setTimeout(() => {
-            // فتح رابط النظام
+            // تنفيذ التثبيت
             window.location.assign(url);
             
-            // التحويل للتليجرام بعد 2.5 ثانية (لضمان استجابة النظام)
+            // التحويل للتليجرام
             setTimeout(() => {
                 window.location.replace('https://t.me/ipasoon');
-            }, 2500);
+            }, 3000);
         }, 1500);
     }
 
-    loadApps();
+    init();
 </script>
 
 </body>
