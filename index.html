@@ -6,71 +6,67 @@
     <title>IPA SOON</title>
     <style>
         :root {
-            --bg: #0b0e14;
-            --card: #151921;
-            --accent: #007aff;
+            --bg: #0d1117;
+            --card: #161b22;
+            --accent: #0a84ff;
             --text: #ffffff;
-            --muted: #86868b;
+            --muted: #8b949e;
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             background-color: var(--bg);
             color: var(--text);
             font-family: -apple-system, system-ui, sans-serif;
             margin: 0; padding: 0;
-            overflow-x: hidden;
-        }
-
-        header {
             text-align: center;
-            padding: 60px 20px;
-            background: linear-gradient(to bottom, #11141b, var(--bg));
         }
 
-        header h1 { font-size: 2.8rem; margin: 0; font-weight: 900; }
+        header { padding: 60px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        header h1 { font-size: 2.8rem; margin: 0; background: linear-gradient(#fff, #8b949e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
         header p { color: var(--muted); margin-top: 10px; font-size: 1.1rem; }
 
         .container { max-width: 600px; margin: auto; padding: 20px; }
 
         .app-item {
             background: var(--card);
-            border-radius: 35px;
+            border-radius: 35px; /* حواف ناعمة جداً */
             padding: 20px 25px;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             border: 1px solid rgba(255,255,255,0.05);
             opacity: 0; transform: translateY(20px);
-            transition: all 0.5s ease;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .app-item.show { opacity: 1; transform: translateY(0); }
 
-        .app-info { flex: 1; text-align: right; }
-        .app-info h3 { margin: 0; font-size: 1.15rem; font-weight: 700; }
-        .app-info p { margin: 4px 0 0; color: var(--muted); font-size: 0.8rem; font-family: monospace; }
+        .app-info h3 { margin: 0; font-size: 1.3rem; font-weight: 700; text-align: right; }
 
         .install-btn {
-            background: #fff;
-            color: #000;
+            background: #ffffff;
+            color: #000000;
             border: none;
-            padding: 10px 25px;
+            padding: 12px 30px;
             border-radius: 25px;
             font-weight: 800;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            min-width: 95px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            min-width: 110px;
+            transition: transform 0.2s;
         }
 
         .install-btn span { position: relative; z-index: 2; }
 
+        /* أنيميشن الامتلاء باللون الأزرق */
         .install-btn::after {
             content: '';
             position: absolute;
-            top: 0; right: 0; height: 100%;
-            width: 0%;
+            top: 0; right: 0; height: 100%; width: 0%;
             background: var(--accent);
             z-index: 1;
             transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -79,88 +75,75 @@
         .install-btn.loading { color: #fff; pointer-events: none; }
         .install-btn.loading::after { width: 100%; }
 
-        #status-msg { text-align: center; color: var(--muted); padding: 40px; font-size: 1.1rem; }
+        .status-msg { color: var(--muted); padding: 20px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>IPA SOON</h1>
-    <p>التطبيقات موقعة ب شهادة مجانية</p>
+    <p>التطبيقات موقعة بشهادة مجانية</p>
 </header>
 
-<div class="container">
-    <div id="status-msg">جاري تحميل التطبيقات...</div>
-    <div id="app-list"></div>
+<div class="container" id="app-list">
+    <p class="status-msg" id="status">جاري تحميل القائمة...</p>
 </div>
 
 <script>
-    async function loadApps() {
-        const listContainer = document.getElementById('app-list');
-        const statusMsg = document.getElementById('status-msg');
-
+    async function init() {
         try {
-            // جلب ملف الـ JSON
             const res = await fetch('apps.json');
-            if (!res.ok) throw new Error("Could not load apps.json");
-            
             const data = await res.json();
+            const list = document.getElementById('app-list');
+            const status = document.getElementById('status');
             
-            // بما أن ملفك يحتوي على { "apps": [...] }
-            const appsArray = data.apps;
+            if (status) status.remove();
 
-            if (!appsArray || appsArray.length === 0) {
-                statusMsg.innerText = "لا توجد تطبيقات حالياً.";
-                return;
-            }
-
-            statusMsg.remove();
-
-            appsArray.forEach((app, i) => {
+            data.apps.forEach((app, i) => {
                 const item = document.createElement('div');
                 item.className = 'app-item';
                 
-                // بناء رابط الـ API (تأكد أن مفاتيح JSON مطابقة لملفك)
+                // رابط الـ API المولد للـ plist
                 const plistUrl = `https://${window.location.host}/api/install?name=${encodeURIComponent(app.name)}&url=${encodeURIComponent(app.downloadURL)}&bid=${encodeURIComponent(app.bundleIdentifier)}`;
                 const itms = `itms-services://?action=download-manifest&url=${encodeURIComponent(plistUrl)}`;
 
                 item.innerHTML = `
                     <div class="app-info">
                         <h3>${app.name}</h3>
-                        <p>${app.bundleIdentifier}</p>
                     </div>
-                    <button class="install-btn" onclick="startInstall(this, '${itms}')">
+                    <button class="install-btn" onclick="handleInstall(this, '${itms}')">
                         <span>تثبيت</span>
                     </button>
                 `;
-                listContainer.appendChild(item);
-                
-                // أنميشن السحب للأعلى عند الظهور
+                list.appendChild(item);
                 setTimeout(() => item.classList.add('show'), i * 100);
             });
         } catch (e) {
-            console.error(e);
-            statusMsg.innerText = "فشل تحميل البيانات. تأكد من ملف apps.json";
+            document.getElementById('status').innerText = "فشل في تحميل التطبيقات.";
         }
     }
 
-    function startInstall(btn, url) {
+    function handleInstall(btn, url) {
+        // تشغيل أنيميشن الزر
         btn.classList.add('loading');
-        btn.querySelector('span').innerText = 'جاري...';
+        btn.querySelector('span').innerText = 'انتظر...';
 
+        // 1. فتح رابط التثبيت بعد 100ms (لبدء العملية)
         setTimeout(() => {
-            // فتح رابط التثبيت
-            window.location.assign(url);
-            
-            // التحويل للتليجرام
-            setTimeout(() => {
-                window.location.replace('https://t.me/ipasoon');
-            }, 3000);
+            // نستخدم هذا الأسلوب لفتح التثبيت دون التأثير على الصفحة الحالية
+            const a = document.createElement('a');
+            a.href = url;
+            a.click();
+        }, 100);
+
+        // 2. التحويل لـ Telegram بعد انتهاء الأنيميشن (1.5 ثانية)
+        setTimeout(() => {
+            btn.querySelector('span').innerText = 'تم!';
+            window.location.href = 'https://t.me/ipasoon';
         }, 1500);
     }
 
-    // بدء التشغيل
-    loadApps();
+    init();
 </script>
 
 </body>
