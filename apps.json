@@ -1,0 +1,32 @@
+[
+  {
+    "name": "سينمانا",
+    "ipa_url": "https://example.com/apps/cinemana.ipa",
+    "bundle_id": "com.shabakaty.cinemana",
+    "image_url": "https://via.placeholder.com/150/000000/FFFFFF?text=Cinemana"
+  },
+  {
+    "name": "فودو",
+    "ipa_url": "https://example.com/apps/vudu.ipa",
+    "bundle_id": "com.vudu.app",
+    "image_url": "https://via.placeholder.com/150/660099/FFFFFF?text=Vudu"
+  },
+  {
+    "name": "انستغرام بلس",
+    "ipa_url": "https://example.com/apps/instaplus.ipa",
+    "bundle_id": "com.burbn.instagram.plus",
+    "image_url": "https://via.placeholder.com/150/C13584/FFFFFF?text=Insta+"
+  },
+  {
+    "name": "تلي دارك",
+    "ipa_url": "https://example.com/apps/teledark.ipa",
+    "bundle_id": "org.telegram.messenger.dark",
+    "image_url": "https://via.placeholder.com/150/1c1c1c/0088cc?text=TeleDark"
+  },
+  {
+    "name": "انمي كلاود",
+    "ipa_url": "https://example.com/apps/animecloud.ipa",
+    "bundle_id": "com.animecloud.ios",
+    "image_url": "https://via.placeholder.com/150/ff4b4b/FFFFFF?text=Anime"
+  }
+]
