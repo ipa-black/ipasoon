@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "انستغرام بلاس",
+      "name": "beegram",
       "bundleIdentifier": "com..instagram",
       "downloadURL": "https://github.com/ipa-black/ipasoon/releases/download/V1/Beegram_426.0.0_1778176122.ipa"
     },
