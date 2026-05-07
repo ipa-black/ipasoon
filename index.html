@@ -2,285 +2,153 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>IPA SOON</title>
     <style>
         :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --text-main: #ffffff;
-            --text-muted: #8b949e;
-            --accent-color: #0a84ff;
-            --header-gradient: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            --bg: #0b0e14;
+            --card: #151921;
+            --accent: #007aff;
+            --text: #ffffff;
+            --muted: #86868b;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, system-ui, sans-serif;
+            margin: 0; padding: 0;
         }
 
         header {
-            background: var(--header-gradient);
             text-align: center;
-            padding: 4rem 1rem 3rem;
-            border-bottom: 1px solid var(--border-color);
-            position: relative;
+            padding: 60px 20px;
+            background: linear-gradient(to bottom, #11141b, var(--bg));
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            background: linear-gradient(to bottom, #ffffff, #8b949e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        header h1 { font-size: 2.5rem; margin: 0; letter-spacing: -1px; }
+        header p { color: var(--muted); margin-top: 10px; font-size: 1.1rem; }
 
-        header p {
-            margin: 10px 0 0 0;
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            font-weight: 300;
-        }
-
-        .container {
-            max-width: 700px;
-            margin: 2rem auto;
-            padding: 0 1rem; /* تقليل المسافة الجانبية للهواتف */
-        }
-
-        .app-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        .container { max-width: 600px; margin: auto; padding: 20px; }
 
         .app-item {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 15px;
+            background: var(--card);
+            border-radius: 35px; /* حواف فائقة النعومة */
+            padding: 15px 20px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 0;
-            transform: translateY(30px);
-            width: 100%; /* ضمان عدم تجاوز العرض */
+            border: 1px solid rgba(255,255,255,0.05);
+            opacity: 0; transform: translateY(20px);
+            transition: all 0.5s ease;
         }
 
-        .app-item:hover {
-            transform: scale(1.02);
-            border-color: rgba(10, 132, 255, 0.3);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .app-item.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .app-item.show { opacity: 1; transform: translateY(0); }
 
         .app-icon {
-            width: 60px;
-            height: 60px;
+            width: 65px; height: 65px;
             border-radius: 18px;
-            object-fit: cover;
             margin-left: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-            flex-shrink: 0; /* منع الأيقونة من الانكماش */
+            background: #222;
         }
 
-        .app-info {
-            flex-grow: 1;
-            min-width: 0; /* حل سحري يمنع النص من دفع الأزرار للخارج */
-            margin-left: 10px;
-        }
-
-        .app-info h3 {
-            margin: 0 0 5px 0;
-            font-size: 1.1rem;
-            font-weight: 700;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis; /* إضافة نقاط للأسماء الطويلة */
-        }
-
-        .app-info p {
-            margin: 0;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis; /* إضافة نقاط للـ Bundle ID الطويل */
-            direction: ltr; /* جعل اتجاه النص إنجليزي لتجنب الخلل */
-            text-align: right;
-        }
+        .app-info { flex: 1; }
+        .app-info h3 { margin: 0; font-size: 1.1rem; }
+        .app-info p { margin: 3px 0 0; color: var(--muted); font-size: 0.8rem; font-family: monospace; }
 
         .install-btn {
-            background-color: #ffffff;
-            color: #000000;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: 800;
-            font-size: 0.9rem;
+            background: #fff;
+            color: #000;
             border: none;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-weight: bold;
             cursor: pointer;
             position: relative;
             overflow: hidden;
             min-width: 90px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            flex-shrink: 0; /* يمنع الزر من الانكماش */
         }
 
-        .install-btn span {
-            position: relative;
-            z-index: 2;
-            transition: color 0.3s ease;
-        }
+        .install-btn span { position: relative; z-index: 2; }
 
-        .install-btn::before {
+        .install-btn::after {
             content: '';
             position: absolute;
-            top: 0;
-            right: 0;
-            height: 100%;
+            top: 0; right: 0; height: 100%;
             width: 0%;
-            background-color: var(--accent-color);
+            background: var(--accent);
             z-index: 1;
             transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .install-btn:not(.loading):hover {
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
+        .install-btn.loading { color: #fff; pointer-events: none; }
+        .install-btn.loading::after { width: 100%; }
 
-        .install-btn.loading {
-            pointer-events: none;
-            box-shadow: 0 0 15px rgba(10, 132, 255, 0.5);
-        }
-
-        .install-btn.loading::before {
-            width: 100%;
-        }
-
-        .install-btn.loading span {
-            color: #ffffff;
-        }
-
-        .loading-text {
-            text-align: center;
-            color: var(--text-muted);
-            margin-top: 2rem;
-            font-size: 1.1rem;
-        }
-
-        /* تحسينات إضافية للهواتف الصغيرة جداً */
-        @media (max-width: 380px) {
-            .app-icon {
-                width: 50px;
-                height: 50px;
-                margin-left: 10px;
-            }
-            .install-btn {
-                padding: 8px 15px;
-                min-width: 80px;
-                font-size: 0.85rem;
-            }
-        }
+        #loading-ui { text-align: center; color: var(--muted); padding: 20px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>IPA SOON</h1>
-        <p>التطبيقات موقعة بشهادة مجانية</p>
-    </header>
+<header>
+    <h1>IPA SOON</h1>
+    <p>التطبيقات موقعة ب شهادة مجانية</p>
+</header>
 
-    <div class="container">
-        <div class="app-list" id="apps-container">
-            <div class="loading-text" id="loading">جاري جلب القائمة...</div>
-        </div>
-    </div>
+<div class="container">
+    <div id="loading-ui">جاري التحميل...</div>
+    <div id="app-list"></div>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const container = document.getElementById('apps-container');
-            const loading = document.getElementById('loading');
+<script>
+    async function loadApps() {
+        try {
+            const res = await fetch('apps.json');
+            const apps = await res.json();
+            const list = document.getElementById('app-list');
+            document.getElementById('loading-ui').remove();
 
-            try {
-                const response = await fetch('apps.json');
-                const apps = await response.json();
-                loading.remove();
+            apps.forEach((app, i) => {
+                const item = document.createElement('div');
+                item.className = 'app-item';
+                
+                // إنشاء رابط البليست عبر الـ API
+                const plistUrl = `https://${window.location.host}/api/install?name=${encodeURIComponent(app.name)}&ipa_url=${encodeURIComponent(app.ipa_url)}&bundle_id=${encodeURIComponent(app.bundle_id)}&image_url=${encodeURIComponent(app.image_url)}`;
+                const itms = `itms-services://?action=download-manifest&url=${encodeURIComponent(plistUrl)}`;
 
-                apps.forEach((app, index) => {
-                    const apiUrl = `https://${window.location.host}/api/install?name=${encodeURIComponent(app.name)}&ipa_url=${encodeURIComponent(app.ipa_url)}&bundle_id=${encodeURIComponent(app.bundle_id)}&image_url=${encodeURIComponent(app.image_url)}`;
-                    const installLink = `itms-services://?action=download-manifest&url=${encodeURIComponent(apiUrl)}`;
+                item.innerHTML = `
+                    <img src="${app.image_url}" class="app-icon" onerror="this.src='https://via.placeholder.com/65'">
+                    <div class="app-info">
+                        <h3>${app.name}</h3>
+                        <p>${app.bundle_id}</p>
+                    </div>
+                    <button class="install-btn" onclick="startInstall(this, '${itms}')">
+                        <span>تثبيت</span>
+                    </button>
+                `;
+                list.appendChild(item);
+                setTimeout(() => item.classList.add('show'), i * 100);
+            });
+        } catch (e) { console.error(e); }
+    }
 
-                    const appDiv = document.createElement('div');
-                    appDiv.className = 'app-item';
-                    
-                    // أضفنا الخاصية onerror للصورة لكي تضع صورة احتياطية في حال فشل الرابط
-                    appDiv.innerHTML = `
-                        <img src="${app.image_url}" alt="${app.name}" class="app-icon" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg'">
-                        <div class="app-info">
-                            <h3>${app.name}</h3>
-                            <p>${app.bundle_id}</p>
-                        </div>
-                        <button class="install-btn"><span>تثبيت</span></button>
-                    `;
+    function startInstall(btn, url) {
+        btn.classList.add('loading');
+        btn.querySelector('span').innerText = 'جاري...';
 
-                    const btn = appDiv.querySelector('.install-btn');
-                    const btnText = appDiv.querySelector('.install-btn span');
+        // تنفيذ التثبيت بعد انتهاء الأنميشن
+        setTimeout(() => {
+            // فتح رابط النظام
+            window.location.assign(url);
+            
+            // التحويل للتليجرام بعد 2.5 ثانية (لضمان استجابة النظام)
+            setTimeout(() => {
+                window.location.replace('https://t.me/ipasoon');
+            }, 2500);
+        }, 1500);
+    }
 
-                    btn.addEventListener('click', (e) => {
-                        e.preventDefault();
-
-                        btn.classList.add('loading');
-                        btnText.innerText = 'جاري...';
-
-                        const iframe = document.createElement('iframe');
-                        iframe.style.display = 'none';
-                        iframe.src = installLink;
-                        document.body.appendChild(iframe);
-
-                        setTimeout(() => {
-                            btnText.innerText = '100%';
-                            
-                            setTimeout(() => {
-                                window.location.href = 'https://t.me/ipasoon';
-                                setTimeout(() => document.body.removeChild(iframe), 1000);
-                            }, 300);
-                            
-                        }, 1500);
-                    });
-
-                    container.appendChild(appDiv);
-
-                    setTimeout(() => {
-                        appDiv.classList.add('show');
-                    }, index * 100);
-                });
-
-            } catch (error) {
-                loading.innerText = 'خطأ في تحميل البيانات.';
-                console.error(error);
-            }
-        });
-    </script>
+    loadApps();
+</script>
 
 </body>
 </html>
