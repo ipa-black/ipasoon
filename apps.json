@@ -1,29 +1,34 @@
 {
   "apps": [
     {
-      "name": "beegram",
-      "bundleIdentifier": "com..instagram",
-      "downloadURL": "https://github.com/ipa-black/ipasoon/releases/download/V1/Beegram_426.0.0_1778176122.ipa"
-    },
-    {
       "name": "سينمانا",
       "bundleIdentifier": "com.foox.cinemanaa.fixed",
+      "image": "https://up6.cc/2026/05/177817920926224.jpeg",
       "downloadURL": "https://github.com/ipa-black/ipasoon/releases/download/V1/_4.1.0_1778176174.ipa"
     },
     {
       "name": "فودو",
       "bundleIdentifier": "com.sinosig.ybapp",
+      "image": "https://up6.cc/2026/05/177817920925273.jpeg",
       "downloadURL": "https://github.com/ipa-black/ipasoon/releases/download/V1/Vood.Cinema_1.0.6_1778176163.ipa"
     },
     {
-      "name": "يوتيوب",
-      "bundleIdentifier": "com.google..youtube",
-      "downloadURL": "https://github.com/ipa-black/ipasoon/releases/download/V1/YouTube_21.17.3_1778176151.ipa"
+      "name": "انستغرام بلس",
+      "bundleIdentifier": "com..instagram",
+      "image": "https://up6.cc/2026/05/177817920921181.jpeg",
+      "downloadURL": "https://github.com/ipa-black/ipasoon/releases/download/V1/Beegram_426.0.0_1778176122.ipa"
     },
     {
       "name": "تلي دارك",
       "bundleIdentifier": "app.teledark",
+      "image": "https://up6.cc/2026/05/177817920921181.jpeg",
       "downloadURL": "https://github.com/ipa-black/ipasoon/releases/download/V1/_12.6.2_1778176111.ipa"
+    },
+    {
+      "name": "يوتيوب",
+      "bundleIdentifier": "com.google..youtube",
+      "image": "https://up6.cc/2026/05/177817920923932.jpeg",
+      "downloadURL": "https://github.com/ipa-black/ipasoon/releases/download/V1/YouTube_21.17.3_1778176151.ipa"
     }
   ]
 }
