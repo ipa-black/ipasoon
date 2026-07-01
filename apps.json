@@ -4,7 +4,8 @@
       "name": "سينمانا",
       "bundleIdentifier": "thewonderofyou.Feather",
       "image": "https://up6.cc/2026/05/177817920926224.jpeg",
-      "downloadURL": "https://github.com/ipa-black/app-attack/releases/download/V1/vodu-signed.ipa"
+      "downloadURL": "https://github.com/ipa-black/app-attack/releases/download/V1/vodu-signed.ipa",
+      "hidden": false
     },
     {
       "name": "فودو",
